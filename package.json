@@ -1,0 +1,26 @@
+{
+  "name": "book-record-management",
+  "version": "1.0.0",
+  "description": "Book record management server build with node.js and express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sumit00007/book-record-management.git"
+  },
+  "author": "Sumit Paul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sumit00007/book-record-management/issues"
+  },
+  "homepage": "https://github.com/Sumit00007/book-record-management#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
