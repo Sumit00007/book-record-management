@@ -6,8 +6,8 @@ This is a book record management API backend for the management of records and b
 
 ## /users
 
-POST : Create a new user
-GET : Get all list of users
+POST : Create a new user✅
+GET : Get all list of users✅
 
 ## /users/{id}
 
@@ -43,13 +43,12 @@ GET: Get all issued books with fine
 
 # Subscription Types
 
-Basic(3 months)
-Standard(6 months)
-Premium(12 months)
+Basic (3 months) Standard (6 months) Premium (12 months)
 
-If the subscription date is 01/09/21
-and subscription type is Basic the valid till date will be 01/12/21
+NOTE: dates will be in format mm/dd/yyyy
 
-If he has an issued book and the issued book is to be returned at 01/10/21 and he missed the date of return , then he gets a fine of Rs. 100
+If the subscription date is 01/08/22 and Subscription type is Standard the valid till date will be 01/02/23
 
-If has an issued book and the issued book is to be returned at 01/10/21 If he missed the date of return and his subscription also expires, then he will get a fine of Rs 200.
+If he has an issued book and the issued book is to be returned at 01/01/23 If he missed the date of return, then he gts a fine of Rs. 100./
+
+If he has an issued book and the issued book is to be returned at 01/01/23 If he missed the date of return, and his subscription also expires, then he will get a fine of Rs 200./
