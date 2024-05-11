@@ -1,6 +1,6 @@
 const express = require('express');//importing express
 const {books} = require('../data/books.json');//json book data import
-
+const {users} = require('../data/users.json');//json user data import
 const router = express.Router();//creating a router
 
 /**
@@ -46,18 +46,27 @@ router.get('/:id', (req, res) => {
  * parameters: none
  */
 router.post('/', (req, res) => {
-    const {id, name, author, price,genre,publisher } = req.body;
-    const book = books.find((each) => each.id === id);
-    if (book){
-        return res.status(400).json({ 
+    const data = req.body;
+
+    if(!data){
+        return res.status(400).json({
             success: false,
-            message: 'Book already exist' });
+            message: 'No data provided'
+        });
     }
-    books.push({ id, name, author, price, genre, publisher });
-    res.status(201).json({ 
+
+    const book = books.find((each) => each.id === data.id)
+        return res.status(400).json({
+            success: false,
+            message: 'Book already exist with this id'
+        });
+
+    const allBooks = [...books, data];
+    return res.status(201).json({
         success: true,
         message: 'Book created successfully',
-        data: books });
+        data: allBooks
+    });
 });
 /**
  * Route: /books/:id
@@ -86,8 +95,87 @@ router.put('/:id', (req, res) => {
     return res.status(200).json({ 
         success: true,
         message: 'Book updated successfully',
-        data: book });
+        data: updatedBook });
     });
+/**
+ * Route: /books/issued/book
+ * method: GET
+ * Description: Get all issued books
+ * Acess: Public
+ * parameters: none
+ */
+router.get('/issued/by-user', (req, res) => {
+    const usersWithIssuedBooks = users.filter((each) =>
+        {if (each.issuedBook) return each
+    });
+    const issuedBooks =[];
+
+    usersWithIssuedBooks.forEach((each) => {
+        const book = books.find((book) => book.id === each.issuedBook);
+
+        book.issuedBy = each.name;
+        book.issuedDate = each.issuedDate;
+        book.returnDate = each.returnDate;
+
+        issuedBooks.push(book);
+    })
+    if(issuedBooks.length===0)
+        return res.status(404).json({
+            success: false,
+            message: 'No books issued yet'
+        });
+    return res.status(200).json({
+        success: true,
+        data: issuedBooks
+    });
+});
+/**
+ * Route: /books/issued/withfine
+ * method: GET
+ * Description: Get all issued books with fine
+ * Acess: Public
+ * parameters: none
+ */
+router.get('/issued/with-fine', (req,res)=>{
+    const usersWithIssuedBooks = users.filter((each) => {
+        if (each.issuedBook) return each
+    });
+    const issuedBooksWithFine = [];
+
+    usersWithIssuedBooks.forEach((each) => {
+        const book = books.find((book) => book.id === each.issuedBook);
+        const getDateInDays = (data="") => {
+            let date;
+            if (data === ""){
+                date = new Date();// current date
+        } else {
+            date = new Date(data);// date from data
+        }
+        let days = Math.floor(date/(1000*60*60*24));
+        return days;
+        };
+        let returnDate = getDateInDays(each.returnDate);
+        let currentDate = getDateInDays();
+        // console.log(returnDate);
+        // console.log(currentDate);
+        if(currentDate>returnDate){
+            book.issuedBy = each.name;
+            book.issuedDate = each.issuedDate;
+            book.returnDate = each.returnDate;
+            issuedBooksWithFine.push(book);
+        }
+    });
+
+    if(issuedBooksWithFine.length===0)
+        return res.status(404).json({
+            success: false,
+            message: 'No books with fine'
+        });
+    return res.status(200).json({
+        success: true,
+        data: issuedBooksWithFine
+    });
+});
 //default export
 module.exports = router; //exporting the router
 
