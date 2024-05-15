@@ -122,7 +122,7 @@ exports.getSubscriptionDetailsById = async (req, res)=>{
         let subscriptionExpiration = subscriptionType(subscriptionDate); 
     
         const data={
-            ...user,
+            ...user._doc,
             subscriptionExpired: subscriptionExpiration < currentDate ,
             daysLeftForExpiration: 
             subscriptionExpiration <= currentDate ? 0 : subscriptionExpiration - currentDate
